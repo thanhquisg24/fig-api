@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TaskModule } from './modules/task/task.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { TaskModule } from './modules/task/task.module';
     }),
     ,
     TaskModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
