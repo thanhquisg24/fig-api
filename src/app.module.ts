@@ -2,11 +2,15 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TaskModule } from './modules/task/task.module';
 import { ArticleModule } from './article/article.module';
+import entities from './typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -14,11 +18,12 @@ import { ArticleModule } from './article/article.module';
       username: 'root',
       password: 'soldier001',
       database: 'nestjs',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities,
+      // entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
+      dropSchema: false,
     }),
-    ,
-    TaskModule,
+    // TaskModule,
     ArticleModule,
   ],
   controllers: [AppController],

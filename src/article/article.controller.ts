@@ -11,7 +11,7 @@ import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 
-@Controller('article')
+@Controller('/api/v1/article')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
@@ -19,8 +19,12 @@ export class ArticleController {
   create(@Body() createArticleDto: CreateArticleDto) {
     return this.articleService.create(createArticleDto);
   }
+  @Get('/demo')
+  demo() {
+    return 'ok demo';
+  }
 
-  @Get()
+  @Get('/')
   findAll() {
     return this.articleService.findAll();
   }
