@@ -6,6 +6,7 @@ import { ArticleModule } from './article/article.module';
 // import entities from './config/typeorm.entities';
 import { ConfigModule } from '@nestjs/config';
 import { typeOrmAsyncConfig } from './config/typeorm.config';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { typeOrmAsyncConfig } from './config/typeorm.config';
     // }),
     // TaskModule,
     ArticleModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

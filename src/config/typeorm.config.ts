@@ -22,14 +22,13 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
         'src/database/migrations/*.ts',
         // path.resolve(`${__dirname}/../../database/migrations/*{.ts,.js}`),
       ],
-
       //   cli: {
       //     migrationsDir: __dirname + '/../database/migrations',
       //   },
       extra: {
         charset: 'utf8mb4_unicode_ci',
       },
-      synchronize: false,
+      synchronize: true,
       logging: true,
       logger: 'file',
     };
