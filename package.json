@@ -37,7 +37,6 @@
     "@nestjs/swagger": "^6.1.4",
     "@nestjs/typeorm": "^9.0.1",
     "@nestjsi/class-validator": "^0.2.2",
-    "mysql2": "^2.3.3",
     "pg": "^8.9.0",
     "random-seed": "^0.3.0",
     "reflect-metadata": "^0.1.13",
