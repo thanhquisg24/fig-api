@@ -5,16 +5,13 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity({ name: 'user' })
-export class UserEntity {
+@Entity({ name: 'vesting_address' })
+export class VestingAddressEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 255, nullable: false, unique: true })
-  email: string;
-
-  @Column({ length: 255, nullable: false })
-  password: string;
+  @Column({ name: 'address', length: 255, nullable: false, unique: true })
+  address: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

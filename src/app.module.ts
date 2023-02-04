@@ -6,7 +6,10 @@ import { ArticleModule } from './article/article.module';
 // import entities from './config/typeorm.entities';
 import { ConfigModule } from '@nestjs/config';
 import { typeOrmAsyncConfig } from './config/typeorm.config';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
+import { TokenModule } from './modules/token/token.module';
+import { VestingAddressModule } from './modules/vesting-address/vesting-address.module';
+import { VesingHistoryModule } from './modules/vesing-history/vesing-history.module';
 
 @Module({
   imports: [
@@ -30,6 +33,9 @@ import { UserModule } from './user/user.module';
     // TaskModule,
     ArticleModule,
     UserModule,
+    TokenModule,
+    VesingHistoryModule,
+    VestingAddressModule,
   ],
   controllers: [AppController],
   providers: [AppService],
