@@ -8,6 +8,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json, urlencoded } from 'express';
 import { AppModule } from './app.module';
+import { HttpErrorFilter } from './common/interceptors/http-error-filter';
 import { TransformInterceptor } from './common/interceptors/response-mapping.interceptor';
 import { filterMessages } from './common/utils/validationUtils';
 
@@ -22,6 +23,7 @@ async function bootstrap() {
   );
   const configService = app.get(ConfigService);
   app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalFilters(new HttpErrorFilter());
   if (configService.get('NODE_ENV') !== 'production') {
     const config = new DocumentBuilder()
       .setTitle('FIG APIs')
