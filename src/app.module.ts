@@ -10,6 +10,7 @@ import { UserModule } from './modules/user/user.module';
 import { TokenModule } from './modules/token/token.module';
 import { VestingAddressModule } from './modules/vesting-address/vesting-address.module';
 import { VesingHistoryModule } from './modules/vesing-history/vesing-history.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { VesingHistoryModule } from './modules/vesing-history/vesing-history.mod
     //   dropSchema: false,
     // }),
     // TaskModule,
+    AuthModule,
     ArticleModule,
     UserModule,
     TokenModule,

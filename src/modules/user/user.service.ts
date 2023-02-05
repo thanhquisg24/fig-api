@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -33,5 +33,19 @@ export class UserService {
 
   async remove(id: number) {
     return await this.repo.delete(id);
+  }
+
+  async getUserByEmail(email: string): Promise<UserEntity> {
+    return await this.repo
+      .findOneBy({
+        email,
+      })
+      .then((entity) => {
+        if (!entity) {
+          return Promise.reject(new NotFoundException('Model not found'));
+        }
+
+        return Promise.resolve(entity || null);
+      });
   }
 }
