@@ -48,4 +48,15 @@ export class UserService {
         return Promise.resolve(entity || null);
       });
   }
+
+  async saveorupdateRefreshToken(
+    refreshToken: string,
+    id: number,
+    refreshtokenexpires,
+  ) {
+    await this.repo.update(id, {
+      refreshtoken: refreshToken,
+      refreshtokenexpires,
+    });
+  }
 }

@@ -6,7 +6,6 @@ import { AuthService } from '../auth.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  private readonly logger = new Logger(LocalStrategy.name);
   constructor(private authService: AuthService) {
     super({ usernameField: 'email' });
     // ở đây mình đăng nhập bằng email và password nên mình phải thực hiện custom usernameField

@@ -7,6 +7,8 @@ import { AuthPayload } from './interfaces/auth-payload.interface';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');
 
+const randtoken = require('rand-token');
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -47,7 +49,27 @@ export class AuthService {
       email: user.email,
       id: user.id,
     };
+    return {
+      access_token: this.jwtService.sign(payload),
+      refresh_token: await this.generateRefreshToken(user.id),
+    };
+  }
+  async logout(userId: number) {
+    return this.userService.update(userId, {
+      refreshtoken: null,
+      id: userId,
+    });
+  }
 
-    return { access_token: this.jwtService.sign(payload) };
+  async generateRefreshToken(userId: number): Promise<string> {
+    const refreshToken = randtoken.generate(16);
+    const expirydate = new Date();
+    expirydate.setDate(expirydate.getDate() + 6);
+    await this.userService.saveorupdateRefreshToken(
+      refreshToken,
+      userId,
+      expirydate,
+    );
+    return refreshToken;
   }
 }

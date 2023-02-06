@@ -9,6 +9,7 @@ import { JsonWebTokenStrategy } from './strategies/jwt.strategy';
 import { UserService } from '../user/user.service';
 import { UserEntity } from '../user/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtRefreshTokenStrategy } from './strategies/refresh.strategy';
 
 @Module({
   imports: [
@@ -20,7 +21,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       signOptions: { expiresIn: '60m' },
     }),
   ],
-  providers: [AuthService, UserService, LocalStrategy, JsonWebTokenStrategy],
+  providers: [
+    AuthService,
+    UserService,
+    LocalStrategy,
+    JsonWebTokenStrategy,
+    JwtRefreshTokenStrategy,
+  ],
   controllers: [AuthController],
   exports: [AuthService],
 })

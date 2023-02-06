@@ -70,4 +70,9 @@ export class CreateUserDto {
   })
   @IsNotBlankString()
   vestingLogic: string;
+
+  @ApiProperty({
+    required: false,
+  })
+  refreshtoken: string | null;
 }

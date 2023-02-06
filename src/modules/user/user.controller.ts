@@ -28,6 +28,8 @@ export class UserController {
     return { id: user.id };
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.userService.findAll();

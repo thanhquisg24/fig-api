@@ -40,6 +40,12 @@ export class UserEntity {
   @Column({ name: 'vesting_logic', length: 255, nullable: false })
   vestingLogic: string;
 
+  @Column({ name: 'refreshtoken', length: 255, nullable: true })
+  refreshtoken: string;
+
+  @Column({ name: 'refreshtokenexpires', length: 255, nullable: true })
+  refreshtokenexpires: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 }

@@ -1,14 +1,18 @@
-import { Request, Controller, Post, UseGuards } from '@nestjs/common';
+import { Controller, Logger, Post, Request, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { RefreshTokenGuard } from 'src/common/guards/refresh-auth.guard';
 import { LocalAuthGuard } from '../../common/guards/local-auth.guard';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
+import { RefreshTokenDto } from './dto/RefreshTokenDto';
 import { UserLoginDto } from './dto/UserLoginDto';
 
 @Controller('api/v1/auth')
@@ -19,9 +23,9 @@ export class AuthController {
     private authService: AuthService,
   ) {}
 
+  private logger = new Logger(AuthController.name);
   //handle login
-  @UseGuards(LocalAuthGuard)
-  @Post('/login')
+
   @ApiBody({ type: UserLoginDto })
   @ApiOkResponse({ description: 'result Token' })
   @ApiBadRequestResponse({
@@ -30,8 +34,40 @@ export class AuthController {
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
   })
+  @UseGuards(LocalAuthGuard)
+  @Post('/login')
   async login(@Request() request): Promise<any> {
     return this.authService.login(request.user);
+  }
+
+  @ApiBearerAuth()
+  @ApiBody({ type: RefreshTokenDto })
+  @ApiOkResponse({ description: 'refresh Token' })
+  @ApiBadRequestResponse({
+    description: 'Invalid parameter',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server error',
+  })
+  @UseGuards(RefreshTokenGuard)
+  @Post('/refresh-token')
+  async refreshToken(@Request() req) {
+    return await this.authService.login(req.user);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('/logout')
+  logout(@Request() req) {
+    this.authService.logout(req.user['id']);
+    return 'ok';
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('/check_token')
+  checkToken() {
+    return 'ok';
   }
 
   // @Post('/register')
