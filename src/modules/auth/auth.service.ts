@@ -6,7 +6,7 @@ import { UserService } from '../user/user.service';
 import { AuthPayload } from './interfaces/auth-payload.interface';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');
-
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const randtoken = require('rand-token');
 
 @Injectable()
