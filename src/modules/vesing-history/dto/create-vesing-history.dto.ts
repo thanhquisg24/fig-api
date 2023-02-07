@@ -6,12 +6,6 @@ export class CreateVesingHistoryDto {
   @ApiProperty({
     required: true,
   })
-  address: string;
-
-  @IsNotBlankString()
-  @ApiProperty({
-    required: true,
-  })
   txId: string;
 
   @IsPositiveInt()

@@ -52,6 +52,8 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
       refresh_token: await this.generateRefreshToken(user.id),
+      email: user.email,
+      userId: user.id,
     };
   }
   async logout(userId: number) {

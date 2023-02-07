@@ -27,6 +27,11 @@ export class VesingHistoryController {
     return this.vesingHistoryService.findAll();
   }
 
+  @Get('byUserId/:userId')
+  findByUserId(@Param('userId') userId: number) {
+    return this.vesingHistoryService.findByUserId(userId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.vesingHistoryService.findOne(+id);

@@ -16,6 +16,9 @@ export class TokenEntity {
   @Column({ name: 'token_symbol', length: 255, nullable: true })
   tokenSymbol: string;
 
+  @Column({ name: 'token_scan_url', length: 255, nullable: true })
+  tokenScanUrl: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 }

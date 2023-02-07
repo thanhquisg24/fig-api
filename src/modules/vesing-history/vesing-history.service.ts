@@ -19,6 +19,14 @@ export class VesingHistoryService {
     return await this.repo.find();
   }
 
+  async findByUserId(userId: number) {
+    return await this.repo.find({
+      where: {
+        userId,
+      },
+    });
+  }
+
   async findOne(id: number) {
     return await this.repo.findOne({
       where: {

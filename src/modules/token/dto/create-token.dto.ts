@@ -8,4 +8,18 @@ export class CreateTokenDto {
     description: 'tokenAddress',
   })
   tokenAddress: string;
+
+  @IsNotBlankString()
+  @ApiProperty({
+    required: true,
+    description: 'tokenSymbol',
+  })
+  tokenSymbol: string;
+
+  @IsNotBlankString()
+  @ApiProperty({
+    required: true,
+    description: 'tokenScanUrl',
+  })
+  tokenScanUrl: string;
 }
