@@ -1,9 +1,11 @@
+import { AuthPayload } from './interfaces/auth-payload.interface';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { omit } from 'lodash';
 import { UserEntity } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
-import { AuthPayload } from './interfaces/auth-payload.interface';
+import { decryptWithAES } from 'src/common/utils/hash-util';
+import { omit } from 'lodash';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -26,6 +28,15 @@ export class AuthService {
   ): Promise<any> {
     return await bcrypt.compare(password, storePasswordHash);
   }
+
+  async comparePasswordAES(
+    password: string,
+    storePasswordHash: string,
+  ): Promise<any> {
+    const decryptPass = decryptWithAES(storePasswordHash);
+    return password === decryptPass;
+  }
+
   async comparePasswordNonHash(
     password: string,
     storePassword: string,
@@ -34,7 +45,7 @@ export class AuthService {
   }
   async authentication(email: string, _password: string): Promise<any> {
     const user: UserEntity = await this.userService.getUserByEmail(email);
-    const check = await this.comparePasswordNonHash(_password, user.password);
+    const check = await this.comparePasswordAES(_password, user.password);
 
     if (!user || !check) {
       return false;

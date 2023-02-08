@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateVestingAddressDto } from './dto/create-vesting-address.dto';
 import { UpdateVestingAddressDto } from './dto/update-vesting-address.dto';
 import { VestingAddressEntity } from './entities/vesting-address.entity';
+import { encryptWithAES } from 'src/common/utils/hash-util';
 
 @Injectable()
 export class VestingAddressService {
@@ -12,7 +13,11 @@ export class VestingAddressService {
     private readonly repo: Repository<VestingAddressEntity>,
   ) {}
   async create(createVestingAddressDto: CreateVestingAddressDto) {
-    return await this.repo.save(createVestingAddressDto);
+    const dtoWithHashPrivatekey = {
+      ...createVestingAddressDto,
+      private_key: encryptWithAES(createVestingAddressDto.private_key),
+    };
+    return await this.repo.save(dtoWithHashPrivatekey);
   }
 
   async findAll() {

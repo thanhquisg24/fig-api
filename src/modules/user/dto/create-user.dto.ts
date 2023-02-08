@@ -1,11 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsEmailTidy,
-  IsStringDate,
-  IsNotBlankString,
-  IsPositiveInt,
   IntMinMax,
+  IsEmailTidy,
+  IsNotBlankString,
+  IsStringDate,
 } from '@nestjsi/class-validator';
+
+import { ApiProperty } from '@nestjs/swagger';
 import { IsPrice } from '@nestjsi/class-validator/is/is-price';
 
 const MAX_ALLOW_INT = 10000000000;
@@ -38,7 +38,6 @@ export class CreateUserDto {
     required: true,
   })
   @IntMinMax(0, MAX_ALLOW_INT)
-  @IsPositiveInt()
   locked: number;
 
   @ApiProperty({

@@ -3,12 +3,13 @@ import {
   ValidationError,
   ValidationPipe,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json, urlencoded } from 'express';
+
 import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
 import { HttpErrorFilter } from './common/interceptors/http-error-filter';
+import { NestFactory } from '@nestjs/core';
 import { TransformInterceptor } from './common/interceptors/response-mapping.interceptor';
 import { filterMessages } from './common/utils/validationUtils';
 
@@ -23,7 +24,7 @@ async function bootstrap() {
   );
   const configService = app.get(ConfigService);
   app.useGlobalInterceptors(new TransformInterceptor());
-  app.useGlobalFilters(new HttpErrorFilter());
+  // app.useGlobalFilters(new HttpErrorFilter());
   if (configService.get('NODE_ENV') !== 'production') {
     const config = new DocumentBuilder()
       .setTitle('FIG APIs')
