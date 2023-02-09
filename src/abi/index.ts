@@ -1,7 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const TranferContractABI = require('./contract-json/FIG.json');
 
-import { BigNumber } from 'ethers';
 import Web3 from 'web3';
 import { parseEther } from '@ethersproject/units';
 
