@@ -1,0 +1,80 @@
+import Tx from 'ethereumjs-tx';
+import Web3 from 'web3';
+
+const web3 = new Web3(
+  new Web3.providers.HttpProvider('https://rpc-agnek.figchain.org/'),
+);
+
+const contractAddr = '0x3AA56A9c28b77223709d040e32B74694f6381847';
+const contractABI = [
+  // transfer
+  {
+    constant: false,
+    inputs: [
+      {
+        name: '_to',
+        type: 'address',
+      },
+      {
+        name: '_value',
+        type: 'uint256',
+      },
+    ],
+    name: 'transfer',
+    outputs: [
+      {
+        name: '',
+        type: 'bool',
+      },
+    ],
+    type: 'function',
+  },
+];
+const contractOwner = {
+  addr: '0x3B0111B2183742435D8277433a26FdC02AE5Cd12',
+  key: '728ec7302e56103fbbe58d2b07a604710fed57c2d5667ef4b29495603c7397ac',
+};
+
+function sendToken(receiver, amount) {
+  console.log(`Start to send ${amount} tokens to ${receiver}`);
+  const contract = new web3.eth.Contract(contractABI).at(contractAddr);
+  const data = contract.transfer.getData(receiver, amount * 1e18);
+  const gasPrice = web3.eth.gasPrice;
+  const gasLimit = 90000;
+  const rawTransaction = {
+    from: contractOwner.addr,
+    nonce: web3.toHex(web3.eth.getTransactionCount(contractOwner.addr)),
+    gasPrice: web3.toHex(gasPrice),
+    gasLimit: web3.toHex(gasLimit),
+    to: contractAddr,
+    value: 0,
+    data: data,
+    chainId: 9999,
+  };
+
+  const privKey = new Buffer(contractOwner.key, 'hex');
+  const tx = new Tx(rawTransaction);
+  tx.sign(privKey);
+  const serializedTx = tx.serialize();
+  web3.eth.sendRawTransaction(
+    '0x' + serializedTx.toString('hex'),
+    function (err, hash) {
+      if (err) {
+        console.log(err);
+      }
+
+      console.log(hash);
+    },
+  );
+}
+
+async function main() {
+  sendToken('0x718b4BFd914eFB46d3e83D8Bb53279a86A320052', 1);
+}
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
