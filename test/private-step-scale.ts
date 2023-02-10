@@ -2,7 +2,8 @@ import moment from 'moment';
 
 enum STATUS {
   PENDING = 'P',
-  SUCCESS = 'S',
+  SETTLED = 'S',
+  FAIL = 'F',
 }
 
 interface ReceivedTokenSchedule {
@@ -15,11 +16,17 @@ interface ReceivedTokenSchedule {
 
 function readStepStr(stepString: string) {
   const splitStep = stepString.split('|');
-  const [percentStep, firstLockStep, monthStep] = splitStep;
+  const [percentStep, firstLockStep, releaseStep] = splitStep;
+  const firstLockStepV = firstLockStep.slice(0, firstLockStep.length - 1);
+  const firstLockStepMask = firstLockStep.slice(-1);
+  const releaseStepV = releaseStep.slice(0, releaseStep.length - 1);
+  const releaseStepMask = releaseStep.slice(-1);
   return {
     percentStep: Number(percentStep),
-    firstLockStep: Number(firstLockStep.split('M')[0]),
-    monthStep: Number(monthStep.split('M')[0]),
+    firstLockStep: Number(firstLockStepV),
+    firstLockStepMask,
+    releaseStep: Number(releaseStepV),
+    releaseStepMask: releaseStepMask,
   };
 }
 
@@ -30,7 +37,6 @@ function genReceivedTokenScheduleDto(
   endDate: string | Date,
   stepStr: string,
 ) {
-  console.log('🚀 ~ file: private-step-scale.ts:32 ~ startDate', startDate);
   const _start = moment(startDate);
   //   const _end = moment(endDate);
   //   const startMonths = _start.month() + _start.year() * 12;
@@ -41,14 +47,17 @@ function genReceivedTokenScheduleDto(
   const firstReleaseRecord: ReceivedTokenSchedule = {
     id: 0,
     userId,
-    receivedDate: _start.toDate(),
+    receivedDate: _start.format('YYYY-MM-DD'),
     amount: firstReleaseAmt,
     status: STATUS.PENDING,
   };
   const result = [firstReleaseRecord];
 
   const avaiAmt = totalAmount - firstReleaseAmt;
-  const firstLockDate = _start.add(stepConfig.firstLockStep, 'M');
+  const firstLockDate = _start.add(
+    stepConfig.firstLockStep,
+    stepConfig.firstLockStepMask as any,
+  );
   //   console.log(
   //     '🚀 ~ file: private-step-scale.ts:51 ~ firstLockDate',
   //     stepConfig.firstLockStep,
@@ -59,7 +68,10 @@ function genReceivedTokenScheduleDto(
     const dateRelease =
       i === normalAmtStep
         ? firstLockDate
-        : firstLockDate.add(stepConfig.monthStep, 'months');
+        : firstLockDate.add(
+            stepConfig.releaseStep,
+            stepConfig.releaseStepMask as any,
+          );
     const amt = normalAmtStep;
     const obj: ReceivedTokenSchedule = {
       id: 0,
@@ -76,7 +88,7 @@ function genReceivedTokenScheduleDto(
 }
 
 function main() {
-  const step_str = '10|12M|1M';
+  const step_str = '10|12Y|1M';
 
   const userCreateDto = {
     totalAmount: 1000000,

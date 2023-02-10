@@ -8,12 +8,13 @@ import { json, urlencoded } from 'express';
 
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { HttpErrorFilter } from './common/interceptors/http-error-filter';
 import { NestFactory } from '@nestjs/core';
 import { TransformInterceptor } from './common/interceptors/response-mapping.interceptor';
 import { filterMessages } from './common/utils/validationUtils';
+import { initializeTransactionalContext } from 'typeorm-transactional';
 
 async function bootstrap() {
+  initializeTransactionalContext();
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({

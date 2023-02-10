@@ -3,6 +3,9 @@ import {
   TypeOrmModuleAsyncOptions,
   TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
+
+import { DataSource } from 'typeorm';
+import { addTransactionalDataSource } from 'typeorm-transactional';
 import entities from './typeorm.entities';
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
@@ -32,6 +35,13 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       logging: true,
       logger: 'file',
     };
+  },
+  async dataSourceFactory(options) {
+    if (!options) {
+      throw new Error('Invalid options passed');
+    }
+
+    return addTransactionalDataSource(new DataSource(options));
   },
 };
 

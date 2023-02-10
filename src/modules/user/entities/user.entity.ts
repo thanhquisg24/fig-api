@@ -16,19 +16,19 @@ export class UserEntity {
   @Column({ length: 255, nullable: false })
   password: string;
 
-  @Column({ name: 'price', type: 'real', nullable: false })
+  @Column({ name: 'price', type: 'real', nullable: false, default: 0 })
   price: number;
 
-  @Column({ name: 'total_amount', type: 'bigint', nullable: false })
+  @Column({ name: 'total_amount', type: 'bigint', nullable: false, default: 0 })
   totalAmount: number;
 
-  @Column({ name: 'locked', type: 'bigint', nullable: false })
+  @Column({ name: 'locked', type: 'bigint', nullable: false, default: 0 })
   locked: number;
 
-  @Column({ name: 'avaiable', type: 'bigint', nullable: false })
+  @Column({ name: 'avaiable', type: 'bigint', nullable: false, default: 0 })
   avaiable: number;
 
-  @Column({ name: 'claimed', type: 'bigint', nullable: false })
+  @Column({ name: 'claimed', type: 'bigint', nullable: false, default: 0 })
   claimed: number;
 
   @Column({ name: 'start_date', type: 'timestamp', nullable: false })

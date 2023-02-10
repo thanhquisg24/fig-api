@@ -9,7 +9,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsPrice } from '@nestjsi/class-validator/is/is-price';
 import { MAX_ALLOW_INT } from 'src/common/constants';
 
-export class CreateUserDto {
+export class GenInitUserDto {
   @ApiProperty({
     required: true,
   })
@@ -37,24 +37,6 @@ export class CreateUserDto {
   @ApiProperty({
     required: true,
   })
-  @IntMinMax(0, MAX_ALLOW_INT)
-  locked: number;
-
-  @ApiProperty({
-    required: true,
-  })
-  @IntMinMax(0, MAX_ALLOW_INT)
-  avaiable: number;
-
-  @ApiProperty({
-    required: true,
-  })
-  @IntMinMax(0, MAX_ALLOW_INT)
-  claimed: number;
-
-  @ApiProperty({
-    required: true,
-  })
   @IsStringDate()
   startDate: Date;
 
@@ -69,9 +51,4 @@ export class CreateUserDto {
   })
   @IsNotBlankString()
   vestingLogic: string;
-
-  @ApiProperty({
-    required: false,
-  })
-  refreshtoken: string | null;
 }
