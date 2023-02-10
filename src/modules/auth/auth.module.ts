@@ -1,19 +1,21 @@
-import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
-import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UserModule } from '../user/user.module';
-import { LocalStrategy } from './strategies/local.strategy';
+import { AuthService } from './auth.service';
 import { JsonWebTokenStrategy } from './strategies/jwt.strategy';
-import { UserService } from '../user/user.service';
-import { UserEntity } from '../user/entities/user.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
 import { JwtRefreshTokenStrategy } from './strategies/refresh.strategy';
+import { LocalStrategy } from './strategies/local.strategy';
+import { Module } from '@nestjs/common';
+import { PassportModule } from '@nestjs/passport';
+import { ReceivedTokenScheduleEntity } from '../received_token_schedule/entities/received_token_schedule.entity';
+import { ReceivedTokenScheduleService } from '../received_token_schedule/received_token_schedule.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from '../user/entities/user.entity';
+import { UserModule } from '../user/user.module';
+import { UserService } from '../user/user.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([UserEntity, ReceivedTokenScheduleEntity]),
     UserModule,
     PassportModule,
     JwtModule.register({
@@ -24,6 +26,7 @@ import { JwtRefreshTokenStrategy } from './strategies/refresh.strategy';
   providers: [
     AuthService,
     UserService,
+    ReceivedTokenScheduleService,
     LocalStrategy,
     JsonWebTokenStrategy,
     JwtRefreshTokenStrategy,

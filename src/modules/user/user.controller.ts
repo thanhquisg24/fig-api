@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserService } from './user.service';
 import { omit } from 'lodash';
+import { GenInitUserDto } from './dto/gen-init-user.dto';
 
 @Controller('api/v1/user')
 @ApiTags('User APIs')
@@ -17,6 +18,14 @@ export class UserController {
     const user: UserEntity & CreateUserDto = await this.userService.create(
       createUserDto,
     );
+    return { id: user.id };
+  }
+
+  @Post('create-and-gen-schedule')
+  // @UseGuards(JwtAuthGuard)
+  async genInit(@Body() initDto: GenInitUserDto) {
+    const user: UserEntity & GenInitUserDto =
+      await this.userService.createAndGenSchedule(initDto);
     return { id: user.id };
   }
 
