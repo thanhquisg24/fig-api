@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { ReceivedTokenScheduleModule } from './modules/received_token_schedule/received_token_schedule.module';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TokenModule } from './modules/token/token.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
@@ -21,6 +22,7 @@ import { typeOrmAsyncConfig } from './config/typeorm.config';
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
+    ScheduleModule.forRoot(),
     // TypeOrmModule.forRoot({
     //   type: 'mysql',
     //   host: 'localhost',
