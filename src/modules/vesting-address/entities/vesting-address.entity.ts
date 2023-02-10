@@ -22,6 +22,6 @@ export class VestingAddressEntity {
   @Column({ name: 'private_key', length: 255, nullable: false })
   private_key: string;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 }

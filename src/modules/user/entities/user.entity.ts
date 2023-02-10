@@ -31,10 +31,10 @@ export class UserEntity {
   @Column({ name: 'claimed', type: 'bigint', nullable: false, default: 0 })
   claimed: number;
 
-  @Column({ name: 'start_date', type: 'timestamp', nullable: false })
+  @Column({ name: 'start_date', type: 'timestamptz', nullable: false })
   startDate: Date;
 
-  @Column({ name: 'end_date', type: 'timestamp', nullable: false })
+  @Column({ name: 'end_date', type: 'timestamptz', nullable: false })
   endDate: Date;
 
   @Column({ name: 'vesting_logic', length: 255, nullable: false })
@@ -46,6 +46,6 @@ export class UserEntity {
   @Column({ name: 'refreshtokenexpires', length: 255, nullable: true })
   refreshtokenexpires: string;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 }

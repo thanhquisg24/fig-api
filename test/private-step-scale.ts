@@ -91,9 +91,9 @@ function main() {
   const step_str = '10|12Y|1M';
 
   const userCreateDto = {
-    totalAmount: 1000000,
-    startDate: '2022-01-01',
-    endDate: '2025-01-01',
+    totalAmount: 10000,
+    startDate: '2023-09-02',
+    endDate: '2025-09-02',
   };
 
   const r = genReceivedTokenScheduleDto(

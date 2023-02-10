@@ -2,7 +2,7 @@ import { CreateReceivedTokenScheduleDto } from './dto/create-received_token_sche
 import { Injectable } from '@nestjs/common';
 import { UpdateReceivedTokenScheduleDto } from './dto/update-received_token_schedule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Raw, Repository } from 'typeorm';
 import { ReceivedTokenScheduleEntity } from './entities/received_token_schedule.entity';
 import { STATUS } from 'src/common/constants';
 import moment from 'moment';
@@ -87,6 +87,16 @@ export class ReceivedTokenScheduleService {
     return await this.repo.find();
   }
 
+  async findByUserId(userId: number, endDate: Date) {
+    return await this.repo.findBy({
+      userId,
+      status: STATUS.PENDING,
+      receivedDate: Raw((alias) => `${alias} <= NOW() And ${alias} <=:end`, {
+        end: endDate,
+      }),
+    });
+  }
+
   async findOne(id: number) {
     return await this.repo.findOne({
       where: {
@@ -124,5 +134,12 @@ export class ReceivedTokenScheduleService {
     if (saveObjs.length > 0) {
       return this.repo.save(saveObjs);
     }
+  }
+  @Transactional()
+  updateRowsStatusToSettle(rows: ReceivedTokenScheduleEntity[]) {
+    const settledRows = rows.map((c) => {
+      return { ...c, status: STATUS.SETTLED };
+    });
+    return this.repo.save(settledRows);
   }
 }

@@ -21,6 +21,6 @@ export class ReceivedTokenScheduleEntity {
   @Column({ length: 255, nullable: false, default: STATUS.PENDING })
   status: STATUS;
 
-  @CreateDateColumn({ name: 'received_at' })
+  @CreateDateColumn({ name: 'received_at', type: 'timestamptz' })
   receivedDate: Date;
 }

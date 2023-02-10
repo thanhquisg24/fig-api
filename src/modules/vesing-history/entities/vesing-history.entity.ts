@@ -27,7 +27,7 @@ export class VesingHistoryEntity {
   @Column({ name: 'to_address', length: 255, nullable: false })
   toAddress: string;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 
   @Column({ length: 255, nullable: false, default: STATUS.PENDING })

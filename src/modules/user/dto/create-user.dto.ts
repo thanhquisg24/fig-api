@@ -66,6 +66,8 @@ export class CreateUserDto {
 
   @ApiProperty({
     required: true,
+    description:
+      'ex. 10|10d|20M  .years is	y,quarters is	Q ,months is	M, weeks	is w , days	is d, hours	 is h ,minutes is	m',
   })
   @IsNotBlankString()
   vestingLogic: string;
