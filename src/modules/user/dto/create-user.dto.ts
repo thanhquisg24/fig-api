@@ -5,9 +5,11 @@ import {
   IsStringDate,
 } from '@nestjsi/class-validator';
 
+import { ArrayNotEmpty, IsArray } from 'class-validator';
+
 import { ApiProperty } from '@nestjs/swagger';
 import { IsPrice } from '@nestjsi/class-validator/is/is-price';
-import { MAX_ALLOW_INT } from 'src/common/constants';
+import { MAX_ALLOW_INT, ROLE } from 'src/common/constants';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -76,4 +78,13 @@ export class CreateUserDto {
     required: false,
   })
   refreshtoken: string | null;
+
+  @ApiProperty({
+    required: true,
+    default: [ROLE.USER],
+    description: 'ex. ["USER"]',
+  })
+  @IsArray()
+  @ArrayNotEmpty()
+  roles: ROLE[];
 }

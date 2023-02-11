@@ -12,10 +12,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '../user/entities/user.entity';
 import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
+import { VestingAddressService } from '../vesting-address/vesting-address.service';
+import { VesingHistoryService } from '../vesing-history/vesing-history.service';
+import { VesingHistoryEntity } from '../vesing-history/entities/vesing-history.entity';
+import { VestingAddressEntity } from '../vesting-address/entities/vesting-address.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity, ReceivedTokenScheduleEntity]),
+    TypeOrmModule.forFeature([
+      UserEntity,
+      ReceivedTokenScheduleEntity,
+      VesingHistoryEntity,
+      VestingAddressEntity,
+    ]),
     UserModule,
     PassportModule,
     JwtModule.register({
@@ -27,6 +36,8 @@ import { UserService } from '../user/user.service';
     AuthService,
     UserService,
     ReceivedTokenScheduleService,
+    VestingAddressService,
+    VesingHistoryService,
     LocalStrategy,
     JsonWebTokenStrategy,
     JwtRefreshTokenStrategy,

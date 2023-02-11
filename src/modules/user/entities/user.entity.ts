@@ -1,3 +1,4 @@
+import { ROLE } from 'src/common/constants';
 import {
   Column,
   CreateDateColumn,
@@ -45,6 +46,15 @@ export class UserEntity {
 
   @Column({ name: 'refreshtokenexpires', length: 255, nullable: true })
   refreshtokenexpires: string;
+
+  @Column({
+    name: 'roles',
+    type: 'text',
+    array: true,
+    nullable: true,
+    default: [ROLE.USER],
+  })
+  roles: ROLE[];
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

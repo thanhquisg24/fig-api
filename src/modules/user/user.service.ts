@@ -6,21 +6,15 @@ import {
 } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  LessThanOrEqual,
-  MoreThan,
-  MoreThanOrEqual,
-  Raw,
-  Repository,
-} from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserEntity } from './entities/user.entity';
 import { encryptWithAES } from 'src/common/utils/hash-util';
-import { GenInitUserDto } from './dto/gen-init-user.dto';
+import { MoreThan, Raw, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import { ReceivedTokenScheduleService } from '../received_token_schedule/received_token_schedule.service';
-import { STATUS } from '../../common/constants';
+import { VestingAddressService } from '../vesting-address/vesting-address.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { GenInitUserDto } from './dto/gen-init-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -29,6 +23,7 @@ export class UserService {
     @InjectRepository(UserEntity)
     private readonly repo: Repository<UserEntity>,
     private readonly receivedTokenScheduleService: ReceivedTokenScheduleService,
+    private readonly vestingAddressService: VestingAddressService,
   ) {}
   async create(createUserDto: CreateUserDto) {
     const oldUser = await this.repo.findOneBy({

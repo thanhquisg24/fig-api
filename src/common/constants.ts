@@ -4,3 +4,8 @@ export enum STATUS {
   FAIL = 'F',
 }
 export const MAX_ALLOW_INT = 10000000000;
+
+export enum ROLE {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}

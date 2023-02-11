@@ -59,12 +59,14 @@ export class AuthService {
       name: null,
       email: user.email,
       id: user.id,
+      roles: user.roles,
     };
     return {
       access_token: this.jwtService.sign(payload),
       refresh_token: await this.generateRefreshToken(user.id),
       email: user.email,
       userId: user.id,
+      roles: user.roles,
     };
   }
   async logout(userId: number) {

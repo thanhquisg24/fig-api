@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotBlankString, IsPositiveInt } from '@nestjsi/class-validator';
+import { STATUS } from 'src/common/constants';
 
 export class CreateVesingHistoryDto {
   @IsNotBlankString()
@@ -31,4 +32,10 @@ export class CreateVesingHistoryDto {
     required: true,
   })
   toAddress: string;
+
+  @ApiProperty({
+    required: true,
+    enum: STATUS,
+  })
+  status: STATUS;
 }

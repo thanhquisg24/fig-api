@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -6,14 +14,24 @@ import { UserEntity } from './entities/user.entity';
 import { UserService } from './user.service';
 import { omit } from 'lodash';
 import { GenInitUserDto } from './dto/gen-init-user.dto';
+import { ClaimUserTokenDto } from './dto/claim-user-token-dto';
+import { UserClaimTokenException } from 'src/common/exceptions/ClaimUserToken.exception';
+import { UserTokenService } from './user.token.service';
+import { HasRoles } from 'src/common/decorators/has-roles.decorator';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { ROLE } from 'src/common/constants';
 
 @Controller('api/v1/user')
 @ApiTags('User APIs')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userTokenService: UserTokenService,
+  ) {}
 
   @Post()
-  // @UseGuards(JwtAuthGuard)
+  @HasRoles(ROLE.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   async create(@Body() createUserDto: CreateUserDto) {
     const user: UserEntity & CreateUserDto = await this.userService.create(
       createUserDto,
@@ -22,11 +40,24 @@ export class UserController {
   }
 
   @Post('create-and-gen-schedule')
-  // @UseGuards(JwtAuthGuard)
+  @HasRoles(ROLE.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   async genInit(@Body() initDto: GenInitUserDto) {
     const user: UserEntity & GenInitUserDto =
       await this.userService.createAndGenSchedule(initDto);
     return { id: user.id };
+  }
+
+  @ApiBearerAuth()
+  @Post('claim-token')
+  @UseGuards(JwtAuthGuard)
+  async claimToken(@Body() claimDto: ClaimUserTokenDto, @Request() request) {
+    const currentUserId = request.user['id'];
+    if (currentUserId !== claimDto.userId) {
+      throw new UserClaimTokenException('Current user is not valid!');
+    }
+    const tx: string = await this.userTokenService.claimToken(claimDto);
+    return { tx };
   }
 
   // @ApiBearerAuth()
