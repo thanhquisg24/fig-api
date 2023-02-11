@@ -49,8 +49,8 @@ export class UserController {
   }
 
   @ApiBearerAuth()
-  @Post('claim-token')
   @UseGuards(JwtAuthGuard)
+  @Post('claim-token')
   async claimToken(@Body() claimDto: ClaimUserTokenDto, @Request() request) {
     const currentUserId = request.user['id'];
     if (currentUserId !== claimDto.userId) {
@@ -58,6 +58,7 @@ export class UserController {
     }
     const tx: string = await this.userTokenService.claimToken(claimDto);
     return { tx };
+    // return { tx: 'aaaaa' };
   }
 
   // @ApiBearerAuth()

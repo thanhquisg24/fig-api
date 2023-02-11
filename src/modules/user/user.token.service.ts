@@ -25,17 +25,19 @@ export class UserTokenService {
   @Transactional()
   async claimToken(claimDto: ClaimUserTokenDto): Promise<string> {
     const currentUser = await this.repo.findOneBy({ id: claimDto.userId });
+    const amtTotransfer = Number(currentUser.avaiable);
     if (!currentUser) {
       throw new BadRequestException('This User is not exist!');
     }
     if (currentUser.avaiable <= 0) {
-      throw new UserClaimTokenException('No Token amount avaiable!');
+      throw new UserClaimTokenException('No Token amount available!');
     }
 
     const fromVestTrans =
       await this.vestingAddressService.findOneByUserIdAndDecode(currentUser.id);
 
-    if (currentUser.avaiable > fromVestTrans.balance) {
+    const fromVestBalance = Number(fromVestTrans.balance);
+    if (amtTotransfer > fromVestBalance) {
       throw new UserClaimTokenException('Not enough token to transfer!');
     }
     this.logger.log('claimToken() check balance OK');
@@ -43,9 +45,9 @@ export class UserTokenService {
       address: fromVestTrans.address,
       privateKey: fromVestTrans.private_key,
     };
-    const amtTotransfer = currentUser.avaiable;
+
     const toAddr = claimDto.userAddress;
-    const r = await prepareTxClaim(wallet, toAddr, 11);
+    const r = await prepareTxClaim(wallet, toAddr, amtTotransfer);
     this.logger.log('claimToken() prepareTxClaim ' + r.prepareTxHash);
     const prepareVestingHistoryRow: CreateVesingHistoryDto = {
       txId: r.prepareTxHash,
@@ -76,14 +78,15 @@ export class UserTokenService {
       postHistoryRow,
     );
     this.logger.log('claimToken()  update avaiable token of user');
-    //4. update avaiable token of user and vestingAddress table
+    //4. update avaiable token and claimed of user and vestingAddress table
     const up2 = this.repo.update(currentUser.id, {
-      avaiable: currentUser.avaiable - amtTotransfer,
+      avaiable: Number(currentUser.avaiable) - amtTotransfer,
+      claimed: Number(currentUser.claimed) + amtTotransfer,
     });
     this.logger.log('claimToken()  update balance of vestingAddress table');
     const up3 = this.vestingAddressService.update(fromVestTrans.id, {
       id: fromVestTrans.id,
-      balance: fromVestTrans.balance - amtTotransfer,
+      balance: Number(fromVestTrans.balance) - amtTotransfer,
     });
 
     //combind promise all

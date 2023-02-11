@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ReceivedTokenScheduleService } from './received_token_schedule.service';
 import { CreateReceivedTokenScheduleDto } from './dto/create-received_token_schedule.dto';
 import { UpdateReceivedTokenScheduleDto } from './dto/update-received_token_schedule.dto';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
-@Controller('received-token-schedule')
+@Controller('api/v1/received-token-schedule')
 export class ReceivedTokenScheduleController {
   constructor(
     private readonly receivedTokenScheduleService: ReceivedTokenScheduleService,
@@ -29,6 +32,13 @@ export class ReceivedTokenScheduleController {
   @Get()
   findAll() {
     return this.receivedTokenScheduleService.findAll();
+  }
+
+  @ApiBearerAuth()
+  @Get('/user/:userId')
+  @UseGuards(JwtAuthGuard)
+  findAllByUserId(@Param('userId') userId: number) {
+    return this.receivedTokenScheduleService.findByUserId(userId);
   }
 
   @Get(':id')

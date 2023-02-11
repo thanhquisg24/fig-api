@@ -113,7 +113,7 @@ export class UserService {
     for (let index = 0; index < usersReadyToUnlock.length; index++) {
       const userElem = usersReadyToUnlock[index];
       const sheduleUnlockRows =
-        await this.receivedTokenScheduleService.findByUserId(
+        await this.receivedTokenScheduleService.findPendingByUserId(
           userElem.id,
           userElem.endDate,
         );

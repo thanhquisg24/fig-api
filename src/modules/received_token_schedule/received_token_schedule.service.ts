@@ -87,13 +87,23 @@ export class ReceivedTokenScheduleService {
     return await this.repo.find();
   }
 
-  async findByUserId(userId: number, endDate: Date) {
+  async findPendingByUserId(userId: number, endDate: Date) {
     return await this.repo.findBy({
       userId,
       status: STATUS.PENDING,
       receivedDate: Raw((alias) => `${alias} <= NOW() And ${alias} <=:end`, {
         end: endDate,
       }),
+    });
+  }
+  async findByUserId(userId: number) {
+    return await this.repo.find({
+      where: {
+        userId,
+      },
+      order: {
+        receivedDate: 'ASC', // "DESC"
+      },
     });
   }
 
