@@ -13,6 +13,9 @@ import { CreateReceivedTokenScheduleDto } from './dto/create-received_token_sche
 import { UpdateReceivedTokenScheduleDto } from './dto/update-received_token_schedule.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { ROLE } from 'src/common/constants';
+import { HasRoles } from 'src/common/decorators/has-roles.decorator';
 
 @Controller('api/v1/received-token-schedule')
 export class ReceivedTokenScheduleController {
@@ -20,6 +23,9 @@ export class ReceivedTokenScheduleController {
     private readonly receivedTokenScheduleService: ReceivedTokenScheduleService,
   ) {}
 
+  @ApiBearerAuth()
+  @HasRoles(ROLE.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   create(
     @Body() createReceivedTokenScheduleDto: CreateReceivedTokenScheduleDto,
@@ -46,6 +52,9 @@ export class ReceivedTokenScheduleController {
     return this.receivedTokenScheduleService.findOne(+id);
   }
 
+  @ApiBearerAuth()
+  @HasRoles(ROLE.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -57,6 +66,9 @@ export class ReceivedTokenScheduleController {
     );
   }
 
+  @ApiBearerAuth()
+  @HasRoles(ROLE.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.receivedTokenScheduleService.remove(+id);

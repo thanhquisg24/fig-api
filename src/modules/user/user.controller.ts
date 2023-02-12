@@ -29,9 +29,11 @@ export class UserController {
     private readonly userTokenService: UserTokenService,
   ) {}
 
-  @Post()
+  
+  @ApiBearerAuth()
   @HasRoles(ROLE.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     const user: UserEntity & CreateUserDto = await this.userService.create(
       createUserDto,
@@ -39,6 +41,8 @@ export class UserController {
     return { id: user.id };
   }
 
+  
+  @ApiBearerAuth()
   @Post('create-and-gen-schedule')
   @HasRoles(ROLE.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
