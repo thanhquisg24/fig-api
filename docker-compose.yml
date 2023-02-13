@@ -5,8 +5,8 @@ services:
     container_name: postgres_container
     image: postgres
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_USER: ${POSTGRES_USER:-fig_db_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sWH@KgW+Unc((L5d}
       PGDATA: /data/postgres
     volumes:
       - postgres:/data/postgres
@@ -21,13 +21,24 @@ services:
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-dwYtuY5K%e2eGwGH}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
       - pgadmin:/var/lib/pgadmin
-
     ports:
       - '${PGADMIN_PORT:-5050}:80'
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  fig_api:
+    container_name: fig_api_container
+    image: thanhquisg24/fig-api:latest
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3100:3100'
     networks:
       - postgres
     restart: unless-stopped
@@ -35,7 +46,10 @@ services:
 networks:
   postgres:
     driver: bridge
+  fig_api:
+    driver: bridge
 
 volumes:
   postgres:
   pgadmin:
+  fig_api:

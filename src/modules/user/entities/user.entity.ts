@@ -1,10 +1,11 @@
-import { ROLE } from 'src/common/constants';
 import {
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { ROLE } from 'src/common/constants';
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -32,13 +33,13 @@ export class UserEntity {
   @Column({ name: 'claimed', type: 'bigint', nullable: false, default: 0 })
   claimed: number;
 
-  @Column({ name: 'start_date', type: 'timestamptz', nullable: false })
+  @Column({ name: 'start_date', type: 'timestamptz', nullable: true })
   startDate: Date;
 
-  @Column({ name: 'end_date', type: 'timestamptz', nullable: false })
+  @Column({ name: 'end_date', type: 'timestamptz', nullable: true })
   endDate: Date;
 
-  @Column({ name: 'vesting_logic', length: 255, nullable: false })
+  @Column({ name: 'vesting_logic', length: 255, nullable: true })
   vestingLogic: string;
 
   @Column({ name: 'refreshtoken', length: 255, nullable: true })

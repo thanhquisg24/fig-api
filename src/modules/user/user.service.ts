@@ -7,7 +7,7 @@ import {
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { encryptWithAES } from 'src/common/utils/hash-util';
-import { MoreThan, Raw, Repository } from 'typeorm';
+import { IsNull, MoreThan, Not, Raw, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import { ReceivedTokenScheduleService } from '../received_token_schedule/received_token_schedule.service';
 import { VestingAddressService } from '../vesting-address/vesting-address.service';
@@ -105,6 +105,7 @@ export class UserService {
     this.logger.log('Called handleCronReleaseLock');
     const usersReadyToUnlock = await this.repo.find({
       where: {
+        vestingLogic: Not(IsNull()),
         locked: MoreThan(0),
         startDate: Raw((alias) => `${alias} <= NOW()`),
         endDate: Raw((alias) => `${alias} >= NOW()`),

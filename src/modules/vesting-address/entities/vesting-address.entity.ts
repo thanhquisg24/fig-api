@@ -16,7 +16,7 @@ export class VestingAddressEntity {
   @Column({ name: 'balance', type: 'bigint', nullable: false })
   balance: number;
 
-  @Column({ name: 'address', length: 255, nullable: false, unique: true })
+  @Column({ name: 'address', length: 255, nullable: false })
   address: string;
 
   @Column({ name: 'private_key', length: 255, nullable: false })

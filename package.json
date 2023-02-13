@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "build:prod": "env-cmd -f .env.production nest build",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -44,8 +45,10 @@
     "@truffle/hdwallet-provider": "^2.1.6",
     "@types/ethereum-protocol": "^1.0.2",
     "@types/web3": "^1.2.2",
+    "env-cmd": "^10.0.0",
     "bcrypt": "^5.1.0",
     "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.3",
     "ethereumjs-tx": "^2.1.2",
     "ethers": "5.6.9",
     "lodash": "^4.17.21",

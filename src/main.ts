@@ -26,7 +26,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   app.useGlobalInterceptors(new TransformInterceptor());
   // app.useGlobalFilters(new HttpErrorFilter());
-  if (configService.get('NODE_ENV') !== 'production') {
+  if (configService.get('NODE_ENV') !== 'production-demo') {
     const config = new DocumentBuilder()
       .setTitle('FIG APIs')
       .setDescription('API Documentation for FIG')
@@ -38,6 +38,7 @@ async function bootstrap() {
   }
   app.use(json({ limit: '16mb' }));
   app.use(urlencoded({ extended: true, limit: '16mb' }));
-  await app.listen(3100);
+  const defaultPort = configService.get('PORT') || 3100;
+  await app.listen(defaultPort);
 }
 bootstrap();

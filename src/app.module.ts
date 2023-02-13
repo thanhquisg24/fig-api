@@ -11,14 +11,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
 import { VesingHistoryModule } from './modules/vesing-history/vesing-history.module';
 import { VestingAddressModule } from './modules/vesting-address/vesting-address.module';
+import dotenv from 'dotenv';
 import { typeOrmAsyncConfig } from './config/typeorm.config';
 
+dotenv.config();
 // import entities from './config/typeorm.entities';
+const ENV = process.env.NODE_ENV;
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env'],
+      envFilePath: !ENV ? '.env.dev' : `.env.${ENV}`,
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
