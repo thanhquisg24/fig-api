@@ -34,12 +34,10 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 package-lock.json
-package-lock.json
-package-lock.json
+
 .env
 .env.dev
 .env.production
-.env
 docker-compose.yml
 docker-compose2.yml
-docker-compose.yml
+
